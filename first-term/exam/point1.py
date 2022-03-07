@@ -46,7 +46,7 @@ class KNN(Model):
         for x in X:
             distances=[]
             for x_train in self.X_train:
-                distances.append(self.distance(x,x_train))
+                distances.append(self.distance(x))
             distances.sort()
             k_nearest=distances[:self.neighbours]
             k_nearest_labels=[]
