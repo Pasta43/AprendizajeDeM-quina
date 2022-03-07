@@ -14,13 +14,10 @@ class KNN(Model):
         """
         Fit the model with KNN algorithm
         X - features
-        y - labels
+        y - target
         """
         self.X_train=X
         self.y=y
-        if len(X[0])!=len(y):
-            raise ValueError("X and y must have the same length")
-        return self
     def predict(self,X):
         """
         Predict the labels of the data
@@ -46,21 +43,21 @@ class KNN(Model):
         for x in X:
             distances=[]
             for x_train in self.X_train:
-                distances.append(self.distance(x))
+                distances.append(self.distance(x,x_train))
             distances.sort()
             k_nearest=distances[:self.neighbours]
             k_nearest_labels=[]
             for k in k_nearest:
-                k_nearest_labels.append(self.y[self.X_train.index(k)])
+                k_nearest_labels.append(self.y[self.X_train[k]])
             self.y.append(self.probability(k_nearest_labels))
         return (self.y,[1-self.y[i] for i in range(len(self.y))])
-    def distance(self,x):
+    def distance(self,x,x_train=None):
         """
         Calculate the distance between two data
         x - data
         x_train - data
         """
-        return sum([(x[i]-self.X_train[i])**2 for i in range(len(x))])
+        return sum([(x[i]-x_train[i])**2 for i in range(len(x))])
     def majority(self,k_nearest_labels):
         """
         Calculate the majority of the labels
