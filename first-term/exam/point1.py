@@ -18,7 +18,7 @@ class KNN(Model):
         """
         self.X_train=X
         self.y=y
-        if len(X)!=len(y):
+        if len(X[0])!=len(y):
             raise ValueError("X and y must have the same length")
         return self
     def predict(self,X):
