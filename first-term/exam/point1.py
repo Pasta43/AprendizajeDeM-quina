@@ -23,17 +23,18 @@ class KNN(Model):
         Predict the labels of the data
         X - features
         """
+        prediction=[]
         for x in X:
             distances=[]
             for x_train in self.X_train:
-                distances.append(self.distance(x,x_train))
-            distances.sort()
+                distances.append((x_train,self.distance(x,x_train)))
+            distances.sort(key=lambda x:x[1])
             k_nearest=distances[:self.neighbours]
             k_nearest_labels=[]
             for k in k_nearest:
-                k_nearest_labels.append(self.y[self.X_train.index(k)])
-            self.y.append(self.majority(k_nearest_labels))
-        return self.y
+                k_nearest_labels.append(self.y[self.X_train.index(k[0])])
+            prediction.append(self.majority(k_nearest_labels))
+        return prediction
     def predict_proba(self,X):
         """
         Predict the probabilities of the data
@@ -57,7 +58,7 @@ class KNN(Model):
         x - data
         x_train - data
         """
-        return sum([(x[i]-x_train[i])**2 for i in range(len(x))])
+        return sum([(x[i]-x_train[i])**2 for i in range(len(x_train))])
     def majority(self,k_nearest_labels):
         """
         Calculate the majority of the labels
